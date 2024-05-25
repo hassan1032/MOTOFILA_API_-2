@@ -9,4 +9,6 @@ router.post('/register', requireFieldsMiddleware(vendorAuthFields.register), Ven
 
 router.post('/login', requireFieldsMiddleware(vendorAuthFields.login), VendorAuthController.vendorLogin);
 
+router.post('/forget-password', VendorAuthController.forgetPassword);
+
 export { router as vendorAuthRoute };

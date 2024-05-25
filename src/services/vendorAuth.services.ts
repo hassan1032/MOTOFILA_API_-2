@@ -27,6 +27,10 @@ class VendorServices {
    static async deleteVendor(id: string) {
       await VendorModel.findByIdAndDelete(id).exec();
    }
+
+   static async updateLastOtp(vendorId: any, otp: string): Promise<void> {
+      await VendorModel.findByIdAndUpdate(vendorId, { 'lastOtp': otp }).exec();
+   }
 }
 
 export default VendorServices;

@@ -5,7 +5,8 @@ import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
 import { VendorAuthMessages } from '../messages';
 import { generateToken } from '../auth/jwt.auth';
-
+import { generateOTP } from '../helper';
+import { sendMailOtpVerification } from '../config/mailer';
 class VendorAuthController {
    static async vendorRegistration(req: Request, res: Response, next: NextFunction) {
       try {
@@ -71,6 +72,47 @@ class VendorAuthController {
             type: statusTypes.SUCCESS,
             msg: VendorAuthMessages.loginSuccess,
          });
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   static async forgetPassword(req: Request, res: Response, next: NextFunction) {
+      try {
+         const { email, mobile } = req.body;
+         const vendor = await VendorServices.getVendorByEmailOrMobile(email || mobile);
+         if (!vendor) {
+            return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
+               type: statusTypes.NOT_FOUND,
+               msg: VendorAuthMessages.notFound,
+            });
+         }
+         const otp = generateOTP();
+         const to = vendor?.email;
+         const subject = 'OTP verification';
+         const data = {
+            otp: otp,
+         };
+         if (email) {
+
+            await sendMailOtpVerification(to, subject, data);
+            await VendorServices.updateLastOtp(vendor?._id, otp);
+            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_OK,
+               msg: VendorAuthMessages.otpSent,
+            });
+         } else if (mobile) {
+            //otp send by the mobile
+            await VendorServices.updateLastOtp(vendor?._id, otp);
+            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_OK,
+               msg: VendorAuthMessages.otpSent,
+            });
+         }
       } catch (error) {
          next(error);
       }

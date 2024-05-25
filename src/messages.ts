@@ -6,4 +6,7 @@ export const VendorAuthMessages = {
    notFound: 'Vendor not found.',
    updated: 'Vendor information updated successfully.',
    deleted: 'Vendor deleted successfully.',
+   otpSent: 'OTP sent successfully.',
+   otpVerified: 'OTP verified successfully.',
+   invalidOtp: 'Invalid OTP. Please try again.',
 };

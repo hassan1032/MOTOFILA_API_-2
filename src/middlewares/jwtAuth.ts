@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { verifyToken } from '../auth/jwt.auth';
 
 interface TokenPayload {
-   userId: string;
+   vendorId: string | undefined;
    role: string;
 }
 
@@ -23,7 +23,7 @@ function authenticateCustomer(req: AuthenticatedRequest, res: Response, next: Ne
                status: 'error',
             });
          } else {
-            req.userId = payload.userId;
+            req.userId = payload.vendorId;
             req.role = payload.role;
             next();
          }
@@ -53,7 +53,7 @@ function authenticateAdmin(req: AuthenticatedRequest, res: Response, next: NextF
                status: 'error',
             });
          } else {
-            req.userId = payload.userId;
+            req.userId = payload.vendorId;
             req.role = payload.role;
             next();
          }

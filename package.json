@@ -6,8 +6,9 @@
    "scripts": {
       "dev": "nodemon index.ts",
       "seeder": "ts-node src/seeder/index.ts",
-      "build": "tsc",
-      "prettier": "prettier --write ."
+      "build": "tsc -p tsconfig.json",
+      "prettier": "prettier --write .",
+      "start": "node ./build/index.js"
    },
    "author": "VIKAS KUMAR VERMA",
    "license": "ISC",

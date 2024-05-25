@@ -8,7 +8,7 @@ import { connectDB } from './src/config/db';
 import { errorHandler } from './src/middlewares/errorHandler';
 import { notFoundHandler } from './src/middlewares/notFoundHandler';
 import setHeaders from './src/middlewares/setheaders';
-import routes from './src/routes'
+import routes from './src/routes';
 dotenv.config();
 
 connectDB();
@@ -26,7 +26,7 @@ app.use(setHeaders);
 app.use(
    cors({
       origin: '*',
-   })
+   }),
 );
 
 // Middleware

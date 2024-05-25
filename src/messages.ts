@@ -6,5 +6,4 @@ export const VendorAuthMessages = {
    notFound: 'Vendor not found.',
    updated: 'Vendor information updated successfully.',
    deleted: 'Vendor deleted successfully.',
- };
- 
+};

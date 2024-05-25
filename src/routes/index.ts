@@ -5,7 +5,4 @@ const routes = express.Router();
 
 routes.use('/v1', v1Routes);
 
-
 export default routes;
-
-

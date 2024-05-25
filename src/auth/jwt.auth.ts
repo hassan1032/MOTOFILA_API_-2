@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { API_SECRET } from '../config/jwt';
 
 interface TokenPayload {
-   userId: string;
+   vendorId: any;
    role: string;
 }
 

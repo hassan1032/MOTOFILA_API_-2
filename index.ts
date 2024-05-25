@@ -4,11 +4,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Application } from 'express';
-import {connectDB} from './src/config/db';
+import { connectDB } from './src/config/db';
 import { errorHandler } from './src/middlewares/errorHandler';
 import { notFoundHandler } from './src/middlewares/notFoundHandler';
 import setHeaders from './src/middlewares/setheaders';
-
+import routes from './src/routes'
 dotenv.config();
 
 connectDB();
@@ -34,7 +34,7 @@ app.use(bodyParser.json({ limit: '25mb' }));
 app.use(bodyParser.urlencoded({ extended: false, limit: '25mb' }));
 
 // Routes
-
+app.use('/', routes);
 
 // Error handling middleware
 app.use(errorHandler);

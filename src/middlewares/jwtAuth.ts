@@ -7,23 +7,23 @@ interface TokenPayload {
 }
 
 interface AuthenticatedRequest extends Request {
-   userId?: string;
+   vendorId?: string;
    role?: string;
 }
 
-function authenticateCustomer(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+function authenticateVendor(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
    const authHeader = req.headers.authorization;
    if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
       try {
          const payload = verifyToken(token) as TokenPayload;
-         if (payload.role !== 'customer') {
+         if (payload.role !== 'vendor') {
             res.status(403).json({
-               message: 'Forbidden. Customer role required',
+               message: 'Forbidden. Vendor role required',
                status: 'error',
             });
          } else {
-            req.userId = payload.vendorId;
+            req.vendorId = payload.vendorId;
             req.role = payload.role;
             next();
          }
@@ -41,34 +41,4 @@ function authenticateCustomer(req: AuthenticatedRequest, res: Response, next: Ne
    }
 }
 
-function authenticateAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
-   const authHeader = req.headers.authorization;
-   if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.substring(7);
-      try {
-         const payload = verifyToken(token) as TokenPayload;
-         if (payload.role !== 'admin') {
-            res.status(403).json({
-               message: 'Forbidden. Admin role required',
-               status: 'error',
-            });
-         } else {
-            req.userId = payload.vendorId;
-            req.role = payload.role;
-            next();
-         }
-      } catch (error) {
-         res.status(401).json({
-            message: 'Invalid or expired token',
-            status: 'error',
-         });
-      }
-   } else {
-      res.status(401).json({
-         message: 'Authentication required',
-         status: 'error',
-      });
-   }
-}
-
-export { authenticateCustomer, authenticateAdmin };
+export { authenticateVendor };

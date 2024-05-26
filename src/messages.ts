@@ -10,3 +10,11 @@ export const VendorAuthMessages = {
    otpVerified: 'OTP verified successfully.',
    invalidOtp: 'Invalid OTP. Please try again.',
 };
+
+export const WorkerMessages = {
+   registered: 'Worker registered successfully.',
+   alreadyExists: 'Worker with this mobile already exists.',
+   notFound: 'Worker not found.',
+   updated: 'Worker information updated successfully.',
+   deleted: 'Worker deleted successfully.',
+};

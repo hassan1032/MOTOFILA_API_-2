@@ -7,6 +7,7 @@ import { VendorAuthMessages } from '../messages';
 import { generateToken } from '../auth/jwt.auth';
 import { generateOTP } from '../helper';
 import { sendMailOtpVerification } from '../config/mailer';
+
 class VendorAuthController {
    static async vendorRegistration(req: Request, res: Response, next: NextFunction) {
       try {
@@ -96,7 +97,6 @@ class VendorAuthController {
             otp: otp,
          };
          if (email) {
-
             await sendMailOtpVerification(to, subject, data);
             await VendorServices.updateLastOtp(vendor?._id, otp);
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
@@ -105,7 +105,7 @@ class VendorAuthController {
                msg: VendorAuthMessages.otpSent,
             });
          } else if (mobile) {
-            //otp send by the mobile
+            // otp send by the mobile (This part needs an SMS sending implementation)
             await VendorServices.updateLastOtp(vendor?._id, otp);
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                data: null,
@@ -113,6 +113,40 @@ class VendorAuthController {
                msg: VendorAuthMessages.otpSent,
             });
          }
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   static async verifyOtp(req: Request, res: Response, next: NextFunction) {
+      try {
+         const { email, mobile, otp } = req.body;
+         const vendor = await VendorServices.getVendorByEmailOrMobile(email || mobile);
+         if (!vendor) {
+            return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
+               type: statusTypes.NOT_FOUND,
+               msg: VendorAuthMessages.notFound,
+            });
+         }
+
+         if (vendor.lastOtp !== otp) {
+            return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
+               type: statusTypes.UNAUTHORIZED,
+               msg: VendorAuthMessages.invalidOtp,
+            });
+         }
+
+         const token = generateToken({ vendorId: vendor._id, role: 'vendor' });
+         res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+            data: token,
+            statusCode: httpStatusCodes.HTTP_STATUS_OK,
+            type: statusTypes.SUCCESS,
+            msg: VendorAuthMessages.otpVerified,
+         });
       } catch (error) {
          next(error);
       }

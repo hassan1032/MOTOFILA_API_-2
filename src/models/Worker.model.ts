@@ -9,6 +9,7 @@ export interface Worker extends Document {
     isActive?: boolean;
     documentId: string;
     profileImg: string;
+    status: string;
 }
 
 const WorkerSchema = new Schema<Worker>(
@@ -49,6 +50,9 @@ const WorkerSchema = new Schema<Worker>(
         profileImg: {
             type: String,
             default: '',
+        },
+        status: {
+            type: String
         }
     },
     {

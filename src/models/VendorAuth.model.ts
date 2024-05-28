@@ -9,6 +9,7 @@ export interface Vendor extends Document {
    profileImg?: string;
    status?: boolean;
    lastOtp: string;
+   isApproved: boolean;
 }
 
 const VendorSchema = new Schema<Vendor>(
@@ -45,6 +46,10 @@ const VendorSchema = new Schema<Vendor>(
       lastOtp: {
          type: String,
          default: '',
+      },
+      isApproved: {
+         type: Boolean,
+         default: false,
       },
    },
    {

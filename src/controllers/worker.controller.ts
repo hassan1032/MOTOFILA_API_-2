@@ -44,7 +44,7 @@ class WorkerAuthController {
 
     static async createWorker(req: Request, res: Response, next: NextFunction) {
         try {
-            const { name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg } = req.body;
+            const { name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg  , status} = req.body;
             const existingWorker = await WorkerServices.getWorkerByMobile(mobile);
             if (existingWorker) {
                 return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
@@ -56,7 +56,7 @@ class WorkerAuthController {
             }
 
             const newWorkerData = {
-                name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg
+                name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg,status
             };
 
             const createdWorker = await WorkerServices.createWorker(newWorkerData);
@@ -74,9 +74,9 @@ class WorkerAuthController {
     static async updateWorker(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive } = req.body;
+            const { name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive,status } = req.body;
             const newWorkerDataToUpdate = {
-                name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive
+                name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive,status
             };
 
             const updatedWorker = await WorkerServices.updateWorker(id, newWorkerDataToUpdate);

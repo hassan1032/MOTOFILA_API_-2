@@ -1,10 +1,32 @@
-import express from 'express';
-import { vendorAuthRoute } from './vendorAuth.routes';
-import { workerAuthRoute } from './worker.routes';
+import express from "express";
+import cors from "cors";
+import { userRoute, userAuthRoute } from './userRoutes';
 
-const routes = express.Router();
+import { userAuthentication } from "../../auth/userAuthentication";
+import { vendorAuthentication } from "../../auth/vendorAuthentication";
+import { VendorRoute, VendorAuthRoute } from "./vendorRoutes";
 
-routes.use('/vendor-auth', vendorAuthRoute);
-routes.use('/worker', workerAuthRoute);
 
-export { routes as v1Routes };
+export const api = express.Router();
+
+api.use(cors({
+  origin: true,
+  credentials: true
+}));
+
+
+
+/****************************
+    UNAUTHENTICATED ROUTES
+****************************/
+api.use('/user', userRoute);
+api.use('/vendor', VendorRoute);
+
+
+/****************************
+  AUTHENTICATED ROUTES
+****************************/
+
+api.use('/user', userAuthentication, userAuthRoute);
+api.use('/vendor', vendorAuthentication, VendorAuthRoute);
+

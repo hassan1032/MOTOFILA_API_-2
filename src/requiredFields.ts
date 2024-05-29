@@ -1,9 +1,14 @@
-export const vendorAuthFields = {
+export const userAuthFields = {
    register: ['name', 'mobile', 'email', 'password'],
    login: ['mobile', 'password'],
 };
 
 export const workerFields = {
-   create: ['name', 'mobile', 'salary', 'dateOfJoining', 'aadharNo', 'documentId', 'profileImg'],
-   update: ['name', 'mobile', 'salary', 'dateOfJoining', 'aadharNo', 'documentId', 'profileImg'],
+   create: ['parkingId', 'name', 'mobile', 'salary', 'dateOfJoining', 'aadharNo', 'documentId', 'profileImg'],
+   update: ['parkingId', 'name', 'mobile', 'salary', 'dateOfJoining', 'aadharNo', 'documentId', 'profileImg'],
+};
+
+export const parkingFields = {
+   create: ['name', 'vendorId', 'vendorName', 'location', 'parkingImage'],
+   update: ['name', 'vendorId', 'vendorName', 'location', 'parkingImage'],
 };

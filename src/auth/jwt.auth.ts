@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { API_SECRET } from '../config/jwt';
+import UserModel from '../models/UserModel';
 
 interface TokenPayload {
-   vendorId: any;
-   role: string;
+   userId: any
 }
 
 export function generateToken(payload: TokenPayload): string {
@@ -21,3 +21,22 @@ export function verifyToken(token: string) {
       return null;
    }
 }
+
+
+
+
+
+interface DecodedToken {
+    userId: string;
+}
+
+export const authValues = async (authToken: string) => {
+    try {
+        const result = jwt.verify(authToken, API_SECRET) as DecodedToken;
+        const user = await UserModel.findById(result.userId);
+        return user;
+    } catch (error) {
+        // Handle JWT verification errors or database errors here
+        return null;
+    }
+};

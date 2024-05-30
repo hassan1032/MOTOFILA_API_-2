@@ -12,3 +12,14 @@ export const parkingFields = {
    create: ['name', 'vendorId', 'vendorName', 'location', 'parkingImage'],
    update: ['name', 'vendorId', 'vendorName', 'location', 'parkingImage'],
 };
+
+
+export const modelFields = {
+   create: ['name', 'slug', 'segment'],
+   update: ['name', 'slug', 'segment'],
+};
+
+export const brandFields = {
+   create: ['brandId', 'name', 'slug'],
+   update: ['brandId', 'name', 'slug'],
+};

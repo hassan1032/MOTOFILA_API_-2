@@ -8,7 +8,6 @@ class BrandService {
     static async getBrandById(brandId: string) {
         return BrandModel.findById(brandId);
     }
-
     static async getBrandByName(name: string) {
         return BrandModel.findOne({ name: name });
     }

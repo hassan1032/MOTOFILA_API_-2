@@ -4,6 +4,8 @@ import requireFieldsMiddleware from '../../middlewares/requireFieldsMiddleware';
 import UserAuthController from '../../controllers/userAuth.controller';
 import { userAuthFields } from '../../requiredFields';
 import ParkingController from "../../controllers/parking.controller";
+import BrandController from "../../controllers/brand.controller";
+import ModelController from "../../controllers/model.controller";
 
 export const userRoute = express.Router();
 export const userAuthRoute = express.Router();
@@ -26,7 +28,16 @@ userRoute.post('/verify', UserAuthController.verifyOtp);
 ****************************/
 
 
-userAuthRoute.get('/', ParkingController.getAllParkings);
+userAuthRoute.get('/parking', ParkingController.getAllParkings);
 
-userAuthRoute.get('/:id', ParkingController.getParkingById);
+userAuthRoute.get('/parking/:id', ParkingController.getParkingById);
 
+
+
+/****************************
+    MODEL ROUTES
+****************************/
+
+userAuthRoute.get('/brand', BrandController.getAllBrands);
+
+userAuthRoute.get('/model', ModelController.getModelByBrandId);

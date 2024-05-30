@@ -8,7 +8,7 @@ export interface Brand extends Document {
 }
 
 const brandSchema = new Schema({
-    brandId: { type: String, required: true, unique: true },
+    brandId: { type: String },
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     isActive: { type: Boolean, default: true }

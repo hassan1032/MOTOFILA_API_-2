@@ -26,3 +26,25 @@ export const ParkingMessages = {
    updated: 'Parking information updated successfully.',
    deleted: 'Parking deleted successfully.',
 };
+
+export const BrandMessages = {
+   retrievedSuccessfully: 'Brands retrieved successfully.',
+   foundSuccessfully: 'Brand found successfully.',
+   notFound: 'Brand not found.',
+   createdSuccessfully: 'Brand created successfully.',
+   updatedSuccessfully: 'Brand updated successfully.',
+   deletedSuccessfully: 'Brand deleted successfully.',
+   alreadyExists: 'Brand with this Name already exists.',
+};
+
+
+export const ModelMessages = {
+   retrievedSuccessfully: 'Models retrieved successfully.',
+   foundSuccessfully: 'Model found successfully.',
+   notFound: 'Model not found.',
+   createdSuccessfully: 'Model created successfully.',
+   updatedSuccessfully: 'Model updated successfully.',
+   deletedSuccessfully: 'Model deleted successfully.',
+   alreadyExists: 'Model with this name already exists.',
+   retrievedByBrandIdSuccessfully: 'Models retrieved successfully by brandId.',
+};

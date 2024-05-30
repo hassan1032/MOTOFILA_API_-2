@@ -55,7 +55,7 @@ const UserSchema = new Schema<User>(
       userType: {
          type: String,
          required: true,
-         enum: ['vendor', 'customer'], 
+         enum: ['vendor', 'customer', 'admin'], 
       },
    },
    {

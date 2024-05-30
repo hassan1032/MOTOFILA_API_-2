@@ -3,7 +3,6 @@ import express from "express";
 import requireFieldsMiddleware from '../../middlewares/requireFieldsMiddleware';
 import UserAuthController from '../../controllers/userAuth.controller';
 import { userAuthFields } from '../../requiredFields';
-import WorkerAuthController from "../../controllers/worker.controller";
 import ParkingController from "../../controllers/parking.controller";
 
 export const userRoute = express.Router();

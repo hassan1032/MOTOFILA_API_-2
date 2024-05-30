@@ -9,9 +9,11 @@ import { errorHandler } from './src/middlewares/errorHandler';
 import { notFoundHandler } from './src/middlewares/notFoundHandler';
 import setHeaders from './src/middlewares/setheaders';
 import routes from './src/routes';
+
 dotenv.config();
 
 connectDB();
+
 
 const app: Application = express();
 const port = process.env.PORT || 5000;

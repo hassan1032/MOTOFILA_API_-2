@@ -176,7 +176,8 @@ class UserAuthController {
 
    static async updatePassword(req: Request, res: Response, next: NextFunction) {
       try {
-         const userDetails: any = await authValues(req?.body?.toke);
+         const userDetails: any = await authValues(req?.body?.token);
+         console.log(userDetails)
          const userId = userDetails?._id;
          const { password } = req.body;
          if (!userId) {

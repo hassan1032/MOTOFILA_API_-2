@@ -7,7 +7,7 @@ let dbConnection: Connection | null = null;
 
 const connectDB = async (): Promise<void> => {
    try {
-      const connectionString: string = process.env.MONGO_URI || 'mongodb://localhost:27017/motofila';
+      const connectionString: string = process.env.MONGO_URI || 'mongodb://localhost:27017/motofila_live';
       const conn = await mongoose.connect(connectionString);
       dbConnection = conn.connection;
       console.log(`MongoDB Connected with:`, dbConnection.db.namespace);

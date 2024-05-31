@@ -47,8 +47,8 @@ class UserAuthController {
 
    static async userLogin(req: Request, res: Response, next: NextFunction) {
       try {
-         const { mobile, password } = req.body;
-         const user = await UserServices.getUserByMobile(mobile);
+         const { email,mobile, password } = req.body;
+         const user = await UserServices.getUserByEmailOrMobile(email || mobile);
          if (!user) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,
@@ -67,13 +67,21 @@ class UserAuthController {
                msg: UserAuthMessages.loginFail,
             });
          }
-         const token = generateToken({ userId: user?._id }); 
-         res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-            data: token,
-            statusCode: httpStatusCodes.HTTP_STATUS_OK,
-            type: statusTypes.SUCCESS,
-            msg: UserAuthMessages.loginSuccess,
-         });
+         const otp = generateOTP();
+         const to = user?.email;
+         const subject = 'OTP verification';
+         const data = {
+            otp: otp,
+         };
+         if (user?.email) {
+            await sendMailOtpVerification(to, subject, data);
+            await UserServices.updateLastOtp(user?._id, otp);
+            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_OK,
+               msg: UserAuthMessages.otpSent,
+            });
+         }
       } catch (error) {
          next(error);
       }
@@ -141,7 +149,7 @@ class UserAuthController {
             });
          }
 
-         const token = generateToken({ userId: user._id }); // assuming it's a customer verification
+         const token = generateToken({ userId: user._id });
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
             data: token,
             statusCode: httpStatusCodes.HTTP_STATUS_OK,

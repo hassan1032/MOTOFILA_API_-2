@@ -77,9 +77,9 @@ class UserAuthController {
 
          const passwordMatch = await bcrypt.compare(password, user.password);
          if (!passwordMatch) {
-            return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
+            return res.status(httpStatusCodes.HTTP_STATUS_FORBIDDEN).json({
                data: null,
-               statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
+               statusCode: httpStatusCodes.HTTP_STATUS_FORBIDDEN,
                type: statusTypes.UNAUTHORIZED,
                msg: UserAuthMessages.loginFail,
             });
@@ -152,7 +152,7 @@ class UserAuthController {
          }
 
          if (user.lastOtp !== otp) {
-            return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
+            return res.status(httpStatusCodes.HTTP_STATUS_FORBIDDEN).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_FORBIDDEN,
                type: statusTypes.UNAUTHORIZED,

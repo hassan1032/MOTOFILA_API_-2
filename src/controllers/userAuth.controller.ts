@@ -66,7 +66,7 @@ class UserAuthController {
                msg: UserAuthMessages.notFound,
             });
          }
-
+ console.log(user, "useruseruser")
          if (!user?.isApproved) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,

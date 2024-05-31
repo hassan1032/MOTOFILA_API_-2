@@ -4,6 +4,9 @@ import requireFieldsMiddleware from '../../middlewares/requireFieldsMiddleware';
 import { userAuthFields, workerFields, parkingFields } from '../../requiredFields';
 import UserAuthController from "../../controllers/userAuth.controller";
 import ParkingController from "../../controllers/parking.controller";
+import { uploadPdfMiddleware } from "../../middlewares/uploader.middleware";
+import { uploadPdf } from "../../controllers/uploader.controller";
+
 
 export const VendorRoute = express.Router();
 export const VendorAuthRoute = express.Router();
@@ -19,7 +22,7 @@ VendorRoute.post('/login', requireFieldsMiddleware(userAuthFields.login), UserAu
 
 VendorRoute.post('/forget-password', UserAuthController.forgetPassword);
 VendorRoute.post('/verify', UserAuthController.verifyOtp);
-VendorRoute.post('/reset-password',requireFieldsMiddleware(userAuthFields.resetPassword) , UserAuthController.updatePassword);
+VendorRoute.post('/reset-password', requireFieldsMiddleware(userAuthFields.resetPassword), UserAuthController.updatePassword);
 
 
 /****************************
@@ -51,3 +54,10 @@ VendorAuthRoute.post('/', requireFieldsMiddleware(parkingFields.create), Parking
 VendorAuthRoute.put('/:id', requireFieldsMiddleware(parkingFields.update), ParkingController.updateParking);
 
 VendorAuthRoute.delete('/:id', ParkingController.deleteParking);
+
+
+/****************************
+     UPLOAD PDF ROUTES
+****************************/
+
+VendorAuthRoute.post('/upload/pdf', uploadPdfMiddleware, uploadPdf);

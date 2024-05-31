@@ -7,6 +7,12 @@ import ParkingController from "../../controllers/parking.controller";
 import BrandController from "../../controllers/brand.controller";
 import ModelController from "../../controllers/model.controller";
 import UserVehicleDetailsController from "../../controllers/vehicleDetails.controller";
+import { uploadImage } from '../../controllers/uploader.controller';
+import { uploadImageMiddleware } from '../../middlewares/uploader.middleware';
+
+
+
+
 
 export const userRoute = express.Router();
 export const userAuthRoute = express.Router();
@@ -59,3 +65,10 @@ userAuthRoute.get('/user-vehicle-details/user', UserVehicleDetailsController.get
 userAuthRoute.put('/user-vehicle-details/:id', UserVehicleDetailsController.updateUserVehicleDetails);
 
 userAuthRoute.delete('/user-vehicle-details/:id', UserVehicleDetailsController.deleteUserVehicleDetails);
+
+
+/****************************
+    IMAGE UPLOAD ROUTES
+****************************/
+
+userAuthRoute.post('/upload/img', uploadImageMiddleware, uploadImage);

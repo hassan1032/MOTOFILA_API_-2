@@ -34,13 +34,13 @@ app.use(
 // Middleware
 app.use(bodyParser.json({ limit: '25mb' }));
 app.use(bodyParser.urlencoded({ extended: false, limit: '25mb' }));
-
+app.use(express.static(__dirname + '/public'));
 
 // Routes
 app.use('/', routes);
 
 // Error handling middleware
-app.use(errorHandler);
+// app.use(errorHandler);
 app.use(notFoundHandler);
 
 // Start server

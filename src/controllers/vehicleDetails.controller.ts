@@ -102,7 +102,7 @@ class UserVehicleDetailsController {
 
             const createdUserVehicleDetails = await UserVehicleDetailsService.createUserVehicleDetails(newUserVehicleDetailsData);
             res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-                data: {token:authHeader,user: userDetails, vehicleDetails: createdUserVehicleDetails?createdUserVehicleDetails:null},
+                data: {token:authHeader,user: userDetails, vehicleDetails: createdUserVehicleDetails?[createdUserVehicleDetails]:null},
                 statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
                 type: statusTypes.SUCCESS,
                 msg: UserVehicleDetailsMessages.createdSuccess,

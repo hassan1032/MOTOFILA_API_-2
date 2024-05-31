@@ -50,3 +50,13 @@ export const ModelMessages = {
    alreadyExists: 'Model with this name already exists.',
    retrievedByBrandIdSuccessfully: 'Models retrieved successfully by brandId.',
 };
+
+export const UserVehicleDetailsMessages = {
+   retrievedSuccess: 'User vehicle details retrieved successfully',
+   notFound: 'User vehicle details not found',
+   foundSuccess: 'User vehicle details found successfully',
+   createdSuccess: 'User vehicle details created successfully',
+   updatedSuccess: 'User vehicle details updated successfully',
+   deletedSuccess: 'User vehicle details deleted successfully',
+   alreadyExists: 'User vehicle details already exist'
+};

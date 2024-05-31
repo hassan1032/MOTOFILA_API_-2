@@ -6,6 +6,7 @@ import { userAuthFields } from '../../requiredFields';
 import ParkingController from "../../controllers/parking.controller";
 import BrandController from "../../controllers/brand.controller";
 import ModelController from "../../controllers/model.controller";
+import UserVehicleDetailsController from "../../controllers/vehicleDetails.controller";
 
 export const userRoute = express.Router();
 export const userAuthRoute = express.Router();
@@ -41,3 +42,21 @@ userAuthRoute.get('/parking/:id', ParkingController.getParkingById);
 userRoute.get('/brand', BrandController.getAllBrands);
 
 userRoute.get('/model', ModelController.getModelByBrandId);
+
+
+/****************************
+    USER VEHICLE DETAILS ROUTES
+****************************/
+
+
+userAuthRoute.post('/user-vehicle-details', UserVehicleDetailsController.createUserVehicleDetails);
+
+userAuthRoute.get('/user-vehicle-details', UserVehicleDetailsController.getAllUserVehicleDetails);
+
+// userAuthRoute.get('/user-vehicle-details/:id', UserVehicleDetailsController.getUserVehicleDetailsById);
+
+userAuthRoute.get('/user-vehicle-details/user', UserVehicleDetailsController.getUserVehicleDetailsByUserId);
+
+userAuthRoute.put('/user-vehicle-details/:id', UserVehicleDetailsController.updateUserVehicleDetails);
+
+userAuthRoute.delete('/user-vehicle-details/:id', UserVehicleDetailsController.deleteUserVehicleDetails);

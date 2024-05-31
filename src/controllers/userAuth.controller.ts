@@ -7,6 +7,7 @@ import { UserAuthMessages } from '../messages';
 import { authValues, generateToken } from '../auth/jwt.auth';
 import { generateOTP } from '../helper';
 import { sendMailOtpVerification } from '../config/mailer';
+import UserVehicleDetailsService from '../services/userVehicleDetails.services';
 
 class UserAuthController {
    static async userRegistration(req: Request, res: Response, next: NextFunction) {
@@ -84,10 +85,10 @@ class UserAuthController {
                msg: UserAuthMessages.loginFail,
             });
          }
-        
          const token = generateToken({ userId: user?._id }); 
+         const vehicleDetails = await UserVehicleDetailsService.getUserVehicleDetailsByUserId(user?._id)
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-            data: {token:token,user: user},
+            data: {token:token,user: user, vehicleDetails: vehicleDetails?vehicleDetails:null},
             statusCode: httpStatusCodes.HTTP_STATUS_OK,
             type: statusTypes.SUCCESS,
             msg: UserAuthMessages.loginSuccess,

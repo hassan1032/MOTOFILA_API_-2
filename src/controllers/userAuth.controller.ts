@@ -176,20 +176,9 @@ class UserAuthController {
 
    static async updatePassword(req: Request, res: Response, next: NextFunction) {
       try {
-         const authHeader = req.headers['authorization'];
-         if (!authHeader || typeof authHeader !== 'string') {
-            return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
-               data: null,
-               statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
-               type: statusTypes.FAILURE,
-               msg: 'Authorization header is missing or invalid',
-            });
-         }
-
-         const userDetails: any = await authValues(authHeader);
+         const userDetails: any = await authValues(req?.body?.toke);
          const userId = userDetails?._id;
-         const { newPassword } = req.body;
-
+         const { password } = req.body;
          if (!userId) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
                data: null,
@@ -210,7 +199,7 @@ class UserAuthController {
          }
 
          const saltRounds = 10;
-         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+         const hashedNewPassword = await bcrypt.hash(password, saltRounds);
          await UserServices.updateUser(userId, { password: hashedNewPassword });
 
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({

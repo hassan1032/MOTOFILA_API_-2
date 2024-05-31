@@ -79,7 +79,7 @@ class UserAuthController {
          const passwordMatch = await bcrypt.compare(password, user.password);
          if (!passwordMatch) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
-               data: null,
+               data: user,
                statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
                type: statusTypes.UNAUTHORIZED,
                msg: UserAuthMessages.loginFail,
@@ -177,7 +177,6 @@ class UserAuthController {
    static async updatePassword(req: Request, res: Response, next: NextFunction) {
       try {
          const userDetails: any = await authValues(req?.body?.token);
-         console.log(userDetails)
          const userId = userDetails?._id;
          const { password } = req.body;
          if (!userId) {

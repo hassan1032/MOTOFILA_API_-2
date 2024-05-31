@@ -18,7 +18,7 @@ class UserServices {
       return await newUser.save();
    }
 
-   static async updateUser(id: string, userData: Partial<User>) {
+   static async updateUser(id: any, userData: Partial<User>) {
       return await UserModel.findByIdAndUpdate(id, userData, {
          new: true,
          runValidators: true,

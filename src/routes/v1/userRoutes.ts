@@ -21,7 +21,7 @@ userRoute.post('/login', requireFieldsMiddleware(userAuthFields.login), UserAuth
 
 userRoute.post('/forget-password', UserAuthController.forgetPassword);
 userRoute.post('/verify', UserAuthController.verifyOtp);
-
+userAuthRoute.post('/reset-password', UserAuthController.updatePassword);
 
 /****************************
     PARKING ROUTES

@@ -19,6 +19,7 @@ VendorRoute.post('/login', requireFieldsMiddleware(userAuthFields.login), UserAu
 
 VendorRoute.post('/forget-password', UserAuthController.forgetPassword);
 VendorRoute.post('/verify', UserAuthController.verifyOtp);
+VendorAuthRoute.post('/reset-password', UserAuthController.updatePassword);
 
 
 /****************************

@@ -4,7 +4,7 @@ import UserServices from '../services/userAuth.services';
 import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
 import { UserAuthMessages } from '../messages';
-import { generateToken } from '../auth/jwt.auth';
+import { authValues, generateToken } from '../auth/jwt.auth';
 import { generateOTP } from '../helper';
 import { sendMailOtpVerification } from '../config/mailer';
 
@@ -34,12 +34,21 @@ class UserAuthController {
          };
 
          const createdUser = await UserServices.createUser(newUserdata);
-         res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-            data: createdUser,
-            statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
-            type: statusTypes.SUCCESS,
-            msg: UserAuthMessages.registered,
-         });
+         const otp = generateOTP();
+         const to = createdUser?.email;
+         const subject = 'OTP verification';
+         const data = {
+            otp: otp,
+         };
+         if (createdUser?.email) {
+            await sendMailOtpVerification(to, subject, data);
+            await UserServices.updateLastOtp(createdUser?._id, otp);
+            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_OK,
+               msg: UserAuthMessages.otpSent,
+            });
+         }
       } catch (error) {
          next(error);
       }
@@ -58,6 +67,15 @@ class UserAuthController {
             });
          }
 
+         if (!user?.isApproved) {
+            return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
+               type: statusTypes.NOT_FOUND,
+               msg: UserAuthMessages.notVerified,
+            });
+         }
+
          const passwordMatch = await bcrypt.compare(password, user.password);
          if (!passwordMatch) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
@@ -67,21 +85,15 @@ class UserAuthController {
                msg: UserAuthMessages.loginFail,
             });
          }
-         const otp = generateOTP();
-         const to = user?.email;
-         const subject = 'OTP verification';
-         const data = {
-            otp: otp,
-         };
-         if (user?.email) {
-            await sendMailOtpVerification(to, subject, data);
-            await UserServices.updateLastOtp(user?._id, otp);
-            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-               data: null,
-               statusCode: httpStatusCodes.HTTP_STATUS_OK,
-               msg: UserAuthMessages.otpSent,
-            });
-         }
+        
+         const token = generateToken({ userId: user?._id }); 
+         res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+            data: token,
+            statusCode: httpStatusCodes.HTTP_STATUS_OK,
+            type: statusTypes.SUCCESS,
+            msg: UserAuthMessages.loginSuccess,
+         });
+        
       } catch (error) {
          next(error);
       }
@@ -150,6 +162,7 @@ class UserAuthController {
          }
 
          const token = generateToken({ userId: user._id });
+         await UserServices.updateUser(user?._id, {isApproved:true});
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
             data: token,
             statusCode: httpStatusCodes.HTTP_STATUS_OK,
@@ -160,6 +173,58 @@ class UserAuthController {
          next(error);
       }
    }
+
+   static async updatePassword(req: Request, res: Response, next: NextFunction) {
+      try {
+         const authHeader = req.headers['authorization'];
+         if (!authHeader || typeof authHeader !== 'string') {
+            return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
+               type: statusTypes.FAILURE,
+               msg: 'Authorization header is missing or invalid',
+            });
+         }
+
+         const userDetails: any = await authValues(authHeader);
+         const userId = userDetails?._id;
+         const { newPassword } = req.body;
+
+         if (!userId) {
+            return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
+               type: statusTypes.UNAUTHORIZED,
+               msg: 'User not authenticated',
+            });
+         }
+
+         const user = await UserServices.getUserById(userId);
+         if (!user) {
+            return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
+               data: null,
+               statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
+               type: statusTypes.NOT_FOUND,
+               msg: UserAuthMessages.notFound,
+            });
+         }
+
+         const saltRounds = 10;
+         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+         await UserServices.updateUser(userId, { password: hashedNewPassword });
+
+         res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+            data: null,
+            statusCode: httpStatusCodes.HTTP_STATUS_OK,
+            type: statusTypes.SUCCESS,
+            msg: UserAuthMessages.passwordUpdated,
+         });
+      } catch (error) {
+         next(error);
+      }
+   }
 }
+
+
 
 export default UserAuthController;

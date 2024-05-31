@@ -9,6 +9,8 @@ export const UserAuthMessages = {
    otpSent: 'OTP sent successfully.',
    otpVerified: 'OTP verified successfully.',
    invalidOtp: 'Invalid OTP. Please try again.',
+   notVerified: 'User Not Verified',
+   passwordUpdated:'password updated successfully'
 };
 
 export const WorkerMessages = {

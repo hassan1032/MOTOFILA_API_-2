@@ -1,6 +1,6 @@
 export const userAuthFields = {
    register: ['name', 'mobile', 'email', 'password'],
-   login: ['mobile', 'password'],
+   login: ['password'],
 };
 
 export const workerFields = {

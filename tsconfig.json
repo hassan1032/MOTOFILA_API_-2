@@ -4,20 +4,24 @@
       "target": "es5",
       "module": "commonjs",
       "sourceMap": true,
-      "outDir": "./build",
-      "rootDir": "/",
-      /* Strict Type-Checking Options */
+      "outDir": "build",
+      "rootDir": ".",
       "strict": true,
       "noImplicitAny": true,
-      /* Module Resolution Options */
       "moduleResolution": "node",
-      "baseUrl": "./src",
+      "baseUrl": ".",
       "esModuleInterop": true,
-      /* Advanced Options */
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true
    },
-   "lib": ["es2015"],
-   "include": ["src/**/*", "index.ts"],
-   "exclude": ["node_modules"]
+   "lib": [
+      "es2015"
+   ],
+   "include": [
+      "src/**/*",
+      "index.ts"
+   ],
+   "exclude": [
+      "node_modules"
+   ]
 }

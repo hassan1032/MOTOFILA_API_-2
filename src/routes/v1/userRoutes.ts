@@ -38,6 +38,6 @@ userAuthRoute.get('/parking/:id', ParkingController.getParkingById);
     MODEL ROUTES
 ****************************/
 
-userAuthRoute.get('/brand', BrandController.getAllBrands);
+userRoute.get('/brand', BrandController.getAllBrands);
 
-userAuthRoute.get('/model', ModelController.getModelByBrandId);
+userRoute.get('/model', ModelController.getModelByBrandId);

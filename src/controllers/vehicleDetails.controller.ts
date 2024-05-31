@@ -67,7 +67,7 @@ class UserVehicleDetailsController {
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: userVehicleDetails,
+                data: {token:authHeader,user: userDetails, vehicleDetails: userVehicleDetails?userVehicleDetails:null},
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
                 msg: UserVehicleDetailsMessages.foundSuccess,
@@ -91,11 +91,12 @@ class UserVehicleDetailsController {
 
             const userDetails: any = await authValues(authHeader);
             const  userId  = userDetails._id;
-            const { brandId, modelId, isActive } = req.body;
+            const { brandId, modelId, isActive, licenseNumber } = req.body;
             const newUserVehicleDetailsData = {
                 userId,
                 brandId,
                 modelId,
+                licenseNumber,
                 isActive
             };
 
@@ -114,12 +115,25 @@ class UserVehicleDetailsController {
     static async updateUserVehicleDetails(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { userId, brandId, modelId, isActive } = req.body;
+            const authHeader = req.headers['authorization'];
+            if (!authHeader || typeof authHeader !== 'string') {
+               return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
+                  data: null,
+                  statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
+                  type: statusTypes.FAILURE,
+                  msg: 'Authorization header is missing or invalid',
+               });
+            }
+
+            const userDetails: any = await authValues(authHeader);
+            const  userId  = userDetails._id;
+            const {  brandId, modelId, isActive, licenseNumber } = req.body;
             const newUserVehicleDetailsDataToUpdate = {
                 userId,
                 brandId,
                 modelId,
-                isActive
+                isActive, 
+                licenseNumber
             };
 
             const updatedUserVehicleDetails = await UserVehicleDetailsService.updateUserVehicleDetails(id, newUserVehicleDetailsDataToUpdate);

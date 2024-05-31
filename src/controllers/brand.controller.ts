@@ -1,121 +1,121 @@
 import { NextFunction, Request, Response } from 'express';
-import WorkerServices from '../services/worker.services';
+import BrandService from '../services/brand.services';
 import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
-import { WorkerMessages } from '../messages';
+import { BrandMessages } from '../messages';
 
-class WorkerAuthController {
-    static async getAllWorkers(req: Request, res: Response, next: NextFunction) {
+class BrandController {
+    static async getAllBrands(req: Request, res: Response, next: NextFunction) {
         try {
-            const workers = await WorkerServices.getAllWorkers();
+            const brands = await BrandService.getAllBrands();
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: workers,
+                data: brands,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Workers retrieved successfully',
+                msg: BrandMessages.retrievedSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async getWorkerById(req: Request, res: Response, next: NextFunction) {
+    static async getBrandById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const worker = await WorkerServices.getWorkerById(id);
-            if (!worker) {
+            const brand = await BrandService.getBrandById(id);
+            if (!brand) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: BrandMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: worker,
+                data: brand,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker found successfully',
+                msg: BrandMessages.foundSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async createWorker(req: Request, res: Response, next: NextFunction) {
+    static async createBrand(req: Request, res: Response, next: NextFunction) {
         try {
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status } = req.body;
-            const existingWorker = await WorkerServices.getWorkerByMobile(mobile);
-            if (existingWorker) {
+            const { name, slug, isActive } = req.body;
+            const existingBrand = await BrandService.getBrandByName(name);
+            if (existingBrand) {
                 return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
                     type: statusTypes.FAILURE,
-                    msg: WorkerMessages.alreadyExists,
+                    msg: BrandMessages.alreadyExists,
                 });
             }
 
-            const newWorkerData = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status
+            const newBrandData = {
+                name, slug, isActive
             };
 
-            const createdWorker = await WorkerServices.createWorker(newWorkerData);
+            const createdBrand = await BrandService.createBrand(newBrandData);
             res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-                data: createdWorker,
+                data: createdBrand,
                 statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker created successfully',
+                msg: BrandMessages.createdSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async updateWorker(req: Request, res: Response, next: NextFunction) {
+    static async updateBrand(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status } = req.body;
-            const newWorkerDataToUpdate = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status
+            const { name, slug, isActive } = req.body;
+            const newBrandDataToUpdate = {
+                name, slug, isActive
             };
 
-            const updatedWorker = await WorkerServices.updateWorker(id, newWorkerDataToUpdate);
-            if (!updatedWorker) {
+            const updatedBrand = await BrandService.updateBrand(id, newBrandDataToUpdate);
+            if (!updatedBrand) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: BrandMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: updatedWorker,
+                data: updatedBrand,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker updated successfully',
+                msg: BrandMessages.updatedSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async deleteWorker(req: Request, res: Response, next: NextFunction) {
+    static async deleteBrand(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const deletedWorker: any = await WorkerServices.deleteWorker(id);
-            if (!deletedWorker) {
+            const deletedBrand: any = await BrandService.deleteBrand(id);
+            if (!deletedBrand) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: BrandMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                 data: {},
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker deleted successfully',
+                msg: BrandMessages.deletedSuccessfully,
             });
         } catch (error) {
             next(error);
@@ -123,4 +123,4 @@ class WorkerAuthController {
     }
 }
 
-export default WorkerAuthController;
+export default BrandController;

@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 
-export interface Vendor extends Document {
+export interface User extends Document {
    name: string;
    mobile: string;
    email: string;
@@ -10,9 +10,10 @@ export interface Vendor extends Document {
    status?: boolean;
    lastOtp: string;
    isApproved: boolean;
+   userType: string;
 }
 
-const VendorSchema = new Schema<Vendor>(
+const UserSchema = new Schema<User>(
    {
       name: {
          type: String,
@@ -51,6 +52,11 @@ const VendorSchema = new Schema<Vendor>(
          type: Boolean,
          default: false,
       },
+      userType: {
+         type: String,
+         required: true,
+         enum: ['vendor', 'customer', 'admin'], 
+      },
    },
    {
       timestamps: {
@@ -62,6 +68,6 @@ const VendorSchema = new Schema<Vendor>(
    },
 );
 
-const VendorModel = model<Vendor>('Vendor', VendorSchema);
+const UserModel = model<User>('User', UserSchema);
 
-export default VendorModel;
+export default UserModel;

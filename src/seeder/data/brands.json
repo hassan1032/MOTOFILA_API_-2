@@ -1,0 +1,237 @@
+[
+  {
+    "brandId": "9",
+    "name": "Maruti Suzuki",
+    "slug": "maruti-suzuki"
+  },
+  {
+    "brandId": "7",
+    "name": "Hyundai",
+    "slug": "hyundai"
+  },
+  {
+    "brandId": "6",
+    "name": "Honda",
+    "slug": "honda"
+  },
+  {
+    "brandId": "14",
+    "name": "Tata",
+    "slug": "tata"
+  },
+  {
+    "brandId": "5",
+    "name": "Ford",
+    "slug": "ford"
+  },
+  {
+    "brandId": "16",
+    "name": "Volkswagen",
+    "slug": "volkswagen"
+  },
+  {
+    "brandId": "8",
+    "name": "Mahindra",
+    "slug": "mahindra"
+  },
+  {
+    "brandId": "12",
+    "name": "Renault",
+    "slug": "renault"
+  },
+  {
+    "brandId": "1",
+    "name": "Chevrolet",
+    "slug": "chevrolet"
+  },
+  {
+    "brandId": "15",
+    "name": "Toyota",
+    "slug": "toyota"
+  },
+  {
+    "brandId": "13",
+    "name": "Skoda",
+    "slug": "skoda"
+  },
+  {
+    "brandId": "11",
+    "name": "Nissan",
+    "slug": "nissan"
+  },
+  {
+    "brandId": "4",
+    "name": "Fiat",
+    "slug": "fiat"
+  },
+  {
+    "brandId": "3",
+    "name": "Datsun",
+    "slug": "datsun"
+  },
+  {
+    "brandId": "20",
+    "name": "BMW",
+    "slug": "bmw"
+  },
+  {
+    "brandId": "38",
+    "name": "Kia",
+    "slug": "kia"
+  },
+  {
+    "brandId": "18",
+    "name": "Audi",
+    "slug": "audi"
+  },
+  {
+    "brandId": "26",
+    "name": "Mercedes",
+    "slug": "mercedes"
+  },
+  {
+    "brandId": "34",
+    "name": "Jeep",
+    "slug": "jeep"
+  },
+  {
+    "brandId": "10",
+    "name": "Mitsubishi",
+    "slug": "mitsubishi"
+  },
+  {
+    "brandId": "37",
+    "name": "MG",
+    "slug": "mg"
+  },
+  {
+    "brandId": "24",
+    "name": "Land Rover",
+    "slug": "land-rover"
+  },
+  {
+    "brandId": "30",
+    "name": "Volvo",
+    "slug": "volvo"
+  },
+  {
+    "brandId": "22",
+    "name": "Jaguar",
+    "slug": "jaguar"
+  },
+  {
+    "brandId": "36",
+    "name": "Ssangyong",
+    "slug": "ssangyong"
+  },
+  {
+    "brandId": "32",
+    "name": "Isuzu",
+    "slug": "isuzu"
+  },
+  {
+    "brandId": "27",
+    "name": "Mini",
+    "slug": "mini"
+  },
+  {
+    "brandId": "31",
+    "name": "Force",
+    "slug": "force"
+  },
+  {
+    "brandId": "35",
+    "name": "Opel",
+    "slug": "opel"
+  },
+  {
+    "brandId": "28",
+    "name": "Porsche",
+    "slug": "porsche"
+  },
+  {
+    "brandId": "2",
+    "name": "Daewoo",
+    "slug": "daewoo"
+  },
+  {
+    "brandId": "33",
+    "name": "Hindustan Motors",
+    "slug": "hindustan-motors"
+  },
+  {
+    "brandId": "17",
+    "name": "Aston Martin",
+    "slug": "aston-martin"
+  },
+  {
+    "brandId": "43",
+    "name": "Citroen",
+    "slug": "citroen"
+  },
+  {
+    "brandId": "42",
+    "name": "Lexus",
+    "slug": "lexus"
+  },
+  {
+    "brandId": "19",
+    "name": "Bentley",
+    "slug": "bentley"
+  },
+  {
+    "brandId": "41",
+    "name": "DC",
+    "slug": "dc"
+  },
+  {
+    "brandId": "21",
+    "name": "Ferrari",
+    "slug": "ferrari"
+  },
+  {
+    "brandId": "25",
+    "name": "Maserati",
+    "slug": "maserati"
+  },
+  {
+    "brandId": "23",
+    "name": "Lamborghini",
+    "slug": "lamborghini"
+  },
+  {
+    "brandId": "29",
+    "name": "Rolls Royce",
+    "slug": "rolls-royce"
+  },
+  {
+    "brandId": "39",
+    "name": "Photon",
+    "slug": "photon"
+  },
+  {
+    "brandId": "40",
+    "name": "Jayem",
+    "slug": "jayem"
+  },
+  {
+    "brandId": "44",
+    "name": "Premier",
+    "slug": "premier"
+  },
+  {
+    "brandId": "45",
+    "name": "Hummer",
+    "slug": "hummer"
+  },
+  {
+    "brandId": "46",
+    "name": "BYD",
+    "slug": "byd"
+  },
+  {
+    "brandId": "47",
+    "name": "BIKE",
+    "slug": "bike"
+  }
+]

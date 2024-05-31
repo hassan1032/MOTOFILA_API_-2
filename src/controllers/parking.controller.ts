@@ -1,121 +1,121 @@
 import { NextFunction, Request, Response } from 'express';
-import WorkerServices from '../services/worker.services';
+import ParkingService from '../services/parking.services';
 import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
-import { WorkerMessages } from '../messages';
+import { ParkingMessages } from '../messages';
 
-class WorkerAuthController {
-    static async getAllWorkers(req: Request, res: Response, next: NextFunction) {
+class ParkingController {
+    static async getAllParkings(req: Request, res: Response, next: NextFunction) {
         try {
-            const workers = await WorkerServices.getAllWorkers();
+            const parkings = await ParkingService.getAllParkings();
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: workers,
+                data: parkings,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Workers retrieved successfully',
+                msg: 'Parkings retrieved successfully',
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async getWorkerById(req: Request, res: Response, next: NextFunction) {
+    static async getParkingById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const worker = await WorkerServices.getWorkerById(id);
-            if (!worker) {
+            const parking = await ParkingService.getParkingById(id);
+            if (!parking) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ParkingMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: worker,
+                data: parking,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker found successfully',
+                msg: 'Parking found successfully',
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async createWorker(req: Request, res: Response, next: NextFunction) {
+    static async createParking(req: Request, res: Response, next: NextFunction) {
         try {
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status } = req.body;
-            const existingWorker = await WorkerServices.getWorkerByMobile(mobile);
-            if (existingWorker) {
+            const { name, vendorId, vendorName, location, prices, parkingImage } = req.body;
+            const existingParking = await ParkingService.getParkingByName(name);
+            if (existingParking) {
                 return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
                     type: statusTypes.FAILURE,
-                    msg: WorkerMessages.alreadyExists,
+                    msg: ParkingMessages.alreadyExists,
                 });
             }
 
-            const newWorkerData = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status
+            const newParkingData = {
+                name, vendorId, vendorName, location, prices, parkingImage
             };
 
-            const createdWorker = await WorkerServices.createWorker(newWorkerData);
+            const createdParking = await ParkingService.createParking(newParkingData);
             res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-                data: createdWorker,
+                data: createdParking,
                 statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker created successfully',
+                msg: 'Parking created successfully',
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async updateWorker(req: Request, res: Response, next: NextFunction) {
+    static async updateParking(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status } = req.body;
-            const newWorkerDataToUpdate = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status
+            const { name, vendorId, vendorName, location, prices, parkingImage } = req.body;
+            const newParkingDataToUpdate = {
+                name, vendorId, vendorName, location, prices, parkingImage
             };
 
-            const updatedWorker = await WorkerServices.updateWorker(id, newWorkerDataToUpdate);
-            if (!updatedWorker) {
+            const updatedParking = await ParkingService.updateParking(id, newParkingDataToUpdate);
+            if (!updatedParking) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ParkingMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: updatedWorker,
+                data: updatedParking,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker updated successfully',
+                msg: 'Parking updated successfully',
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async deleteWorker(req: Request, res: Response, next: NextFunction) {
+    static async deleteParking(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const deletedWorker: any = await WorkerServices.deleteWorker(id);
-            if (!deletedWorker) {
+            const deletedParking: any = await ParkingService.deleteParking(id);
+            if (!deletedParking) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ParkingMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                 data: {},
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker deleted successfully',
+                msg: 'Parking deleted successfully',
             });
         } catch (error) {
             next(error);
@@ -123,4 +123,4 @@ class WorkerAuthController {
     }
 }
 
-export default WorkerAuthController;
+export default ParkingController;

@@ -1,77 +1,78 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import VendorServices from '../services/vendorAuth.services';
+import UserServices from '../services/userAuth.services';
 import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
-import { VendorAuthMessages } from '../messages';
+import { UserAuthMessages } from '../messages';
 import { generateToken } from '../auth/jwt.auth';
 import { generateOTP } from '../helper';
 import { sendMailOtpVerification } from '../config/mailer';
 
-class VendorAuthController {
-   static async vendorRegistration(req: Request, res: Response, next: NextFunction) {
+class UserAuthController {
+   static async userRegistration(req: Request, res: Response, next: NextFunction) {
       try {
-         const { name, mobile, email, password } = req.body;
-         const existingVendor = await VendorServices.getVendorByEmailOrMobile(email);
-         if (existingVendor) {
+         const { name, mobile, email, password , userType} = req.body;
+         const existingUser = await UserServices.getUserByEmailOrMobile(email);
+         if (existingUser) {
             return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
                type: statusTypes.FAILURE,
-               msg: VendorAuthMessages.alreadyExists,
+               msg: UserAuthMessages.alreadyExists,
             });
          }
 
          const saltRounds = 10;
          const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-         const newVendorData = {
+         const newUserdata = {
             name,
             mobile,
             email,
             password: hashedPassword,
+            userType: userType,
          };
 
-         const createdVendor = await VendorServices.createVendor(newVendorData);
+         const createdUser = await UserServices.createUser(newUserdata);
          res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-            data: createdVendor,
+            data: createdUser,
             statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
             type: statusTypes.SUCCESS,
-            msg: VendorAuthMessages.registered,
+            msg: UserAuthMessages.registered,
          });
       } catch (error) {
          next(error);
       }
    }
 
-   static async vendorLogin(req: Request, res: Response, next: NextFunction) {
+   static async userLogin(req: Request, res: Response, next: NextFunction) {
       try {
          const { mobile, password } = req.body;
-         const vendor = await VendorServices.getVendorByMobile(mobile);
-         if (!vendor) {
+         const user = await UserServices.getUserByMobile(mobile);
+         if (!user) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                type: statusTypes.NOT_FOUND,
-               msg: VendorAuthMessages.notFound,
+               msg: UserAuthMessages.notFound,
             });
          }
 
-         const passwordMatch = await bcrypt.compare(password, vendor.password);
+         const passwordMatch = await bcrypt.compare(password, user.password);
          if (!passwordMatch) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
                type: statusTypes.UNAUTHORIZED,
-               msg: VendorAuthMessages.loginFail,
+               msg: UserAuthMessages.loginFail,
             });
          }
-         const token = generateToken({ vendorId: vendor?._id, role: 'vendor' });
+         const token = generateToken({ userId: user?._id }); 
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
             data: token,
             statusCode: httpStatusCodes.HTTP_STATUS_OK,
             type: statusTypes.SUCCESS,
-            msg: VendorAuthMessages.loginSuccess,
+            msg: UserAuthMessages.loginSuccess,
          });
       } catch (error) {
          next(error);
@@ -81,36 +82,36 @@ class VendorAuthController {
    static async forgetPassword(req: Request, res: Response, next: NextFunction) {
       try {
          const { email, mobile } = req.body;
-         const vendor = await VendorServices.getVendorByEmailOrMobile(email || mobile);
-         if (!vendor) {
+         const user = await UserServices.getUserByEmailOrMobile(email || mobile);
+         if (!user) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                type: statusTypes.NOT_FOUND,
-               msg: VendorAuthMessages.notFound,
+               msg: UserAuthMessages.notFound,
             });
          }
          const otp = generateOTP();
-         const to = vendor?.email;
+         const to = user?.email;
          const subject = 'OTP verification';
          const data = {
             otp: otp,
          };
          if (email) {
             await sendMailOtpVerification(to, subject, data);
-            await VendorServices.updateLastOtp(vendor?._id, otp);
+            await UserServices.updateLastOtp(user?._id, otp);
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_OK,
-               msg: VendorAuthMessages.otpSent,
+               msg: UserAuthMessages.otpSent,
             });
          } else if (mobile) {
             // otp send by the mobile (This part needs an SMS sending implementation)
-            await VendorServices.updateLastOtp(vendor?._id, otp);
+            await UserServices.updateLastOtp(user?._id, otp);
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_OK,
-               msg: VendorAuthMessages.otpSent,
+               msg: UserAuthMessages.otpSent,
             });
          }
       } catch (error) {
@@ -121,31 +122,31 @@ class VendorAuthController {
    static async verifyOtp(req: Request, res: Response, next: NextFunction) {
       try {
          const { email, mobile, otp } = req.body;
-         const vendor = await VendorServices.getVendorByEmailOrMobile(email || mobile);
-         if (!vendor) {
+         const user = await UserServices.getUserByEmailOrMobile(email || mobile);
+         if (!user) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                type: statusTypes.NOT_FOUND,
-               msg: VendorAuthMessages.notFound,
+               msg: UserAuthMessages.notFound,
             });
          }
 
-         if (vendor.lastOtp !== otp) {
+         if (user.lastOtp !== otp) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
                data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
                type: statusTypes.UNAUTHORIZED,
-               msg: VendorAuthMessages.invalidOtp,
+               msg: UserAuthMessages.invalidOtp,
             });
          }
 
-         const token = generateToken({ vendorId: vendor._id, role: 'vendor' });
+         const token = generateToken({ userId: user._id }); // assuming it's a customer verification
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
             data: token,
             statusCode: httpStatusCodes.HTTP_STATUS_OK,
             type: statusTypes.SUCCESS,
-            msg: VendorAuthMessages.otpVerified,
+            msg: UserAuthMessages.otpVerified,
          });
       } catch (error) {
          next(error);
@@ -153,4 +154,4 @@ class VendorAuthController {
    }
 }
 
-export default VendorAuthController;
+export default UserAuthController;

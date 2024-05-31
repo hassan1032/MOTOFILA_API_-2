@@ -1,6 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
 
 export interface Worker extends Document {
+    parkingId:string;
     name: string;
     mobile: string;
     salery: string;
@@ -14,6 +15,10 @@ export interface Worker extends Document {
 
 const WorkerSchema = new Schema<Worker>(
     {
+        parkingId:{
+            type: String,
+            required: true,
+        },
         name: {
             type: String,
             required: true,

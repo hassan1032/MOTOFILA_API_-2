@@ -1,0 +1,43 @@
+import express from "express";
+
+import requireFieldsMiddleware from '../../middlewares/requireFieldsMiddleware';
+import UserAuthController from '../../controllers/userAuth.controller';
+import { userAuthFields } from '../../requiredFields';
+import ParkingController from "../../controllers/parking.controller";
+import BrandController from "../../controllers/brand.controller";
+import ModelController from "../../controllers/model.controller";
+
+export const userRoute = express.Router();
+export const userAuthRoute = express.Router();
+
+
+/****************************
+    AUTH ROUTES
+****************************/
+
+userRoute.post('/register', requireFieldsMiddleware(userAuthFields.register), UserAuthController.userRegistration);
+
+userRoute.post('/login', requireFieldsMiddleware(userAuthFields.login), UserAuthController.userLogin);
+
+userRoute.post('/forget-password', UserAuthController.forgetPassword);
+userRoute.post('/verify', UserAuthController.verifyOtp);
+
+
+/****************************
+    PARKING ROUTES
+****************************/
+
+
+userAuthRoute.get('/parking', ParkingController.getAllParkings);
+
+userAuthRoute.get('/parking/:id', ParkingController.getParkingById);
+
+
+
+/****************************
+    MODEL ROUTES
+****************************/
+
+userAuthRoute.get('/brand', BrandController.getAllBrands);
+
+userAuthRoute.get('/model', ModelController.getModelByBrandId);

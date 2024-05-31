@@ -1,121 +1,135 @@
 import { NextFunction, Request, Response } from 'express';
-import WorkerServices from '../services/worker.services';
+import ModelService from '../services/model.services';
 import httpStatusCodes from '../statusCodes';
 import statusTypes from '../statusTypes';
-import { WorkerMessages } from '../messages';
+import { ModelMessages } from '../messages';
 
-class WorkerAuthController {
-    static async getAllWorkers(req: Request, res: Response, next: NextFunction) {
+class ModelController {
+    static async getAllModels(req: Request, res: Response, next: NextFunction) {
         try {
-            const workers = await WorkerServices.getAllWorkers();
+            const models = await ModelService.getAllModels();
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: workers,
+                data: models,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Workers retrieved successfully',
+                msg: ModelMessages.retrievedSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async getWorkerById(req: Request, res: Response, next: NextFunction) {
+    static async getModelById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const worker = await WorkerServices.getWorkerById(id);
-            if (!worker) {
+            const model = await ModelService.getModelById(id);
+            if (!model) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ModelMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: worker,
+                data: model,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker found successfully',
+                msg: ModelMessages.foundSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async createWorker(req: Request, res: Response, next: NextFunction) {
+    static async getModelByBrandId(req: Request, res: Response, next: NextFunction) {
         try {
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status } = req.body;
-            const existingWorker = await WorkerServices.getWorkerByMobile(mobile);
-            if (existingWorker) {
+            const brandId:any  = req.query.brandId;
+            const models = await ModelService.getModelsByBrandId(brandId);
+            res.status(httpStatusCodes.HTTP_STATUS_OK).json({
+                data: models,
+                statusCode: httpStatusCodes.HTTP_STATUS_OK,
+                type: statusTypes.SUCCESS,
+                msg: ModelMessages.retrievedByBrandIdSuccessfully,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+    static async createModel(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { brandId, name, slug, segment } = req.body;
+            const existingModel = await ModelService.getModelByName(name);
+            if (existingModel) {
                 return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
                     type: statusTypes.FAILURE,
-                    msg: WorkerMessages.alreadyExists,
+                    msg: ModelMessages.alreadyExists,
                 });
             }
 
-            const newWorkerData = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status
+            const newModelData = {
+                brandId, name, slug, segment
             };
 
-            const createdWorker = await WorkerServices.createWorker(newWorkerData);
+            const createdModel = await ModelService.createModel(newModelData);
             res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
-                data: createdWorker,
+                data: createdModel,
                 statusCode: httpStatusCodes.HTTP_STATUS_CREATED,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker created successfully',
+                msg: ModelMessages.createdSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async updateWorker(req: Request, res: Response, next: NextFunction) {
+    static async updateModel(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status } = req.body;
-            const newWorkerDataToUpdate = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status
+            const { brandId, name, slug, segment } = req.body;
+            const newModelDataToUpdate = {
+                brandId, name, slug, segment
             };
 
-            const updatedWorker = await WorkerServices.updateWorker(id, newWorkerDataToUpdate);
-            if (!updatedWorker) {
+            const updatedModel = await ModelService.updateModel(id, newModelDataToUpdate);
+            if (!updatedModel) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ModelMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-                data: updatedWorker,
+                data: updatedModel,
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker updated successfully',
+                msg: ModelMessages.updatedSuccessfully,
             });
         } catch (error) {
             next(error);
         }
     }
 
-    static async deleteWorker(req: Request, res: Response, next: NextFunction) {
+    static async deleteModel(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const deletedWorker: any = await WorkerServices.deleteWorker(id);
-            if (!deletedWorker) {
+            const deletedModel: any = await ModelService.deleteModel(id);
+            if (!deletedModel) {
                 return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                     data: null,
                     statusCode: httpStatusCodes.HTTP_STATUS_NOT_FOUND,
                     type: statusTypes.NOT_FOUND,
-                    msg: WorkerMessages.notFound,
+                    msg: ModelMessages.notFound,
                 });
             }
             res.status(httpStatusCodes.HTTP_STATUS_OK).json({
                 data: {},
                 statusCode: httpStatusCodes.HTTP_STATUS_OK,
                 type: statusTypes.SUCCESS,
-                msg: 'Worker deleted successfully',
+                msg: ModelMessages.deletedSuccessfully,
             });
         } catch (error) {
             next(error);
@@ -123,4 +137,4 @@ class WorkerAuthController {
     }
 }
 
-export default WorkerAuthController;
+export default ModelController;

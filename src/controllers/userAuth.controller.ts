@@ -66,7 +66,6 @@ class UserAuthController {
                msg: UserAuthMessages.notFound,
             });
          }
- console.log(user, "useruseruser")
          if (!user?.isApproved) {
             return res.status(httpStatusCodes.HTTP_STATUS_NOT_FOUND).json({
                data: null,
@@ -79,7 +78,7 @@ class UserAuthController {
          const passwordMatch = await bcrypt.compare(password, user.password);
          if (!passwordMatch) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
-               data: user,
+               data: null,
                statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
                type: statusTypes.UNAUTHORIZED,
                msg: UserAuthMessages.loginFail,
@@ -88,7 +87,7 @@ class UserAuthController {
         
          const token = generateToken({ userId: user?._id }); 
          res.status(httpStatusCodes.HTTP_STATUS_OK).json({
-            data: token,
+            data: {token:token,user: user},
             statusCode: httpStatusCodes.HTTP_STATUS_OK,
             type: statusTypes.SUCCESS,
             msg: UserAuthMessages.loginSuccess,

@@ -155,7 +155,7 @@ class UserAuthController {
          if (user.lastOtp !== otp) {
             return res.status(httpStatusCodes.HTTP_STATUS_UNAUTHORIZED).json({
                data: null,
-               statusCode: httpStatusCodes.HTTP_STATUS_UNAUTHORIZED,
+               statusCode: httpStatusCodes.HTTP_STATUS_FORBIDDEN,
                type: statusTypes.UNAUTHORIZED,
                msg: UserAuthMessages.invalidOtp,
             });

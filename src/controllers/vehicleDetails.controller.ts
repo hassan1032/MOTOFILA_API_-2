@@ -79,7 +79,19 @@ class UserVehicleDetailsController {
 
     static async createUserVehicleDetails(req: Request, res: Response, next: NextFunction) {
         try {
-            const { userId, brandId, modelId, isActive } = req.body;
+            const authHeader = req.headers['authorization'];
+            if (!authHeader || typeof authHeader !== 'string') {
+               return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
+                  data: null,
+                  statusCode: httpStatusCodes.HTTP_STATUS_BAD_REQUEST,
+                  type: statusTypes.FAILURE,
+                  msg: 'Authorization header is missing or invalid',
+               });
+            }
+
+            const userDetails: any = await authValues(authHeader);
+            const  userId  = userDetails._id;
+            const { brandId, modelId, isActive } = req.body;
             const newUserVehicleDetailsData = {
                 userId,
                 brandId,

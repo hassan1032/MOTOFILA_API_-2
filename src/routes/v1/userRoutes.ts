@@ -53,7 +53,6 @@ userAuthRoute.post('/user-vehicle-details', UserVehicleDetailsController.createU
 
 userAuthRoute.get('/user-vehicle-details', UserVehicleDetailsController.getAllUserVehicleDetails);
 
-// userAuthRoute.get('/user-vehicle-details/:id', UserVehicleDetailsController.getUserVehicleDetailsById);
 
 userAuthRoute.get('/user-vehicle-details/user', UserVehicleDetailsController.getUserVehicleDetailsByUserId);
 

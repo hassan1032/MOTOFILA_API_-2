@@ -4,7 +4,7 @@ export interface Worker extends Document {
     parkingId:string;
     name: string;
     mobile: string;
-    salery: string;
+    salary: string;
     dateOfJoining: string;
     aadharNo: string;
     isActive?: boolean;
@@ -30,9 +30,9 @@ const WorkerSchema = new Schema<Worker>(
             unique: true,
             trim: true,
         },
-        salery: {
+        salary: {
             type: String,
-            required: true,
+          
         },
         dateOfJoining: {
             type: String,

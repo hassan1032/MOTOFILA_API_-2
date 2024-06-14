@@ -1,4 +1,7 @@
 import mongoose, { Connection } from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 mongoose.set('debug', false);
 mongoose.set('strictQuery', false);
@@ -8,6 +11,8 @@ let dbConnection: Connection | null = null;
 const connectDB = async (): Promise<void> => {
    try {
       const connectionString: string = process.env.MONGO_URI || 'mongodb://localhost:27017/motofila_live';
+      console.log(connectionString);
+      
       const conn = await mongoose.connect(connectionString);
       dbConnection = conn.connection;
       console.log(`MongoDB Connected with:`, dbConnection.db.namespace);

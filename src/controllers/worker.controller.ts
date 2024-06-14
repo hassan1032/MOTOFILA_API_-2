@@ -44,7 +44,8 @@ class WorkerAuthController {
 
     static async createWorker(req: Request, res: Response, next: NextFunction) {
         try {
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status } = req.body;
+            const { parkingId, name, mobile, salary, dateOfJoining, aadharNo, documentId, profileImg, status } = req.body;
+            console.log("body>>>",req.body)
             const existingWorker = await WorkerServices.getWorkerByMobile(mobile);
             if (existingWorker) {
                 return res.status(httpStatusCodes.HTTP_STATUS_BAD_REQUEST).json({
@@ -56,8 +57,10 @@ class WorkerAuthController {
             }
 
             const newWorkerData = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, status
+                parkingId, name, mobile, salary, dateOfJoining, aadharNo, documentId, profileImg, status
             };
+            console.log("worker",newWorkerData);
+            
 
             const createdWorker = await WorkerServices.createWorker(newWorkerData);
             res.status(httpStatusCodes.HTTP_STATUS_CREATED).json({
@@ -74,9 +77,9 @@ class WorkerAuthController {
     static async updateWorker(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status } = req.body;
+            const { parkingId, name, mobile, salary, dateOfJoining, aadharNo, documentId, profileImg, isActive, status } = req.body;
             const newWorkerDataToUpdate = {
-                parkingId, name, mobile, salery, dateOfJoining, aadharNo, documentId, profileImg, isActive, status
+                parkingId, name, mobile, salary, dateOfJoining, aadharNo, documentId, profileImg, isActive, status
             };
 
             const updatedWorker = await WorkerServices.updateWorker(id, newWorkerDataToUpdate);

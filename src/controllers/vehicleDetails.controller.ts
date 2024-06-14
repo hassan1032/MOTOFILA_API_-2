@@ -77,7 +77,7 @@ class UserVehicleDetailsController {
         }
     }
 
-    static async createUserVehicleDetails(req: Request, res: Response, next: NextFunction) {
+    static async createUserVehicleDetails(req: Request, res: Response, next: NextFunction) {      
         try {
             const authHeader = req.headers['authorization'];
             if (!authHeader || typeof authHeader !== 'string') {

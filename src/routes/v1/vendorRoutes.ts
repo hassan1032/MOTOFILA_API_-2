@@ -45,15 +45,16 @@ VendorAuthRoute.delete('/worker/:id', WorkerAuthController.deleteWorker);
     PARKING ROUTES
 ****************************/
 
-VendorAuthRoute.get('/', ParkingController.getAllParkings);
+VendorAuthRoute.get('/get-all', ParkingController.getAllParkings);
 
-VendorAuthRoute.get('/:id', ParkingController.getParkingById);
+VendorAuthRoute.get('/getby-id/:id', ParkingController.getParkingById);
 
-VendorAuthRoute.post('/', requireFieldsMiddleware(parkingFields.create), ParkingController.createParking);
 
-VendorAuthRoute.put('/:id', requireFieldsMiddleware(parkingFields.update), ParkingController.updateParking);
+VendorAuthRoute.post('/create-parking', requireFieldsMiddleware(parkingFields.create), ParkingController.createParking);
 
-VendorAuthRoute.delete('/:id', ParkingController.deleteParking);
+VendorAuthRoute.put('/update-by/:id', requireFieldsMiddleware(parkingFields.update), ParkingController.updateParking);
+
+VendorAuthRoute.delete('/delete-by/:id', ParkingController.deleteParking);
 
 
 /****************************
